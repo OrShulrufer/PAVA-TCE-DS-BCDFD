@@ -23,7 +23,7 @@ import seaborn as sns
 # import plotly.graph_objects as go
 # from plotly.subplots import make_subplots
 
-class PAVA_TCE_DS_BCDFD(ClassifierMixin, MetaEstimatorMixin, BaseEstimator):
+class PAVA_TCE_DS_BCDFD_Calibrator(ClassifierMixin, MetaEstimatorMixin, BaseEstimator):
     """
     VATPAVABCCalibrator is a calibration method that uses the PAV algorithm and ABC method
     to adjust predicted probabilities for improved calibration. It combines cross-validation
