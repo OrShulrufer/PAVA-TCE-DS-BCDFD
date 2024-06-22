@@ -17,23 +17,45 @@ bash
 Copy code
 git clone https://github.com/OrShulrufer/PAVA-TCE-DS-BCDFD.git
 cd PAVA-TCE-DS-BCDFD
-pip install -r requirements.txt
+
 Usage
-Here is a basic example of how to use the PAVA-TCE-DS-BCDFD toolkit:
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import precision_score, recall_score
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import RepeatedStratifiedKFold
+from custom_classes.pava_tce_ds_bcdfd import PAVA_TCE_DS_BCDFD_Calibrator
 
-python
-Copy code
-from pava_tce_ds_bcdfd import PAVA_TCE_DS_BCDFD_Calibrator
 
-# Initialize the calibrator
-calibrator = PAVA_TCE_DS_BCDFD_Calibrator(base_estimator=my_base_estimator, cv=5, n_bins=10)
 
-# Fit the calibrator with predicted probabilities and actual outcomes
+data = pd.read_csv('datasets/credit_card_fraud_detection_data.csv')
+X = data.drop("Class", axis=1)
+y = data['Class']
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Initialize base estimator
+base_estimator = LogisticRegression(solver='lbfgs', max_iter=1000, random_state=42)
+
+cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=2, random_state=42)
+
+# Initialize VATPAVABCCalibrator with the base estimator and 5-fold cross-validation
+calibrator = PAVA_TCE_DS_BCDFD_Calibrator(base_estimator=base_estimator, cv=cv)
+
+# Fit the calibrator
 calibrator.fit(X_train, y_train)
 
-# Calibrate new predictions
-calibrated_probabilities = calibrator.predict_proba(X_test)
-Step-by-Step Methodology for Calibration Using PAVA
+# Predict probabilities
+y_pred_proba = calibrator.predict_proba(X_test)[:,1]
+
+print("recall: ", recall_score(y_test, y_pred_proba >= 0.5, zero_division=0))
+print("precision: ", precision_score(y_test, y_pred_proba >= 0.5, zero_division=0))
+
+
+calibrator.plot_pava_bc_statistics(X_test, y_test)
+
 
 1. Obtain Predicted Probabilities and Actual Outcomes
 Collect the predicted probabilities from the classifier (e.g., logistic regression, random forest) and the actual outcomes.
