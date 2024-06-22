@@ -34,10 +34,12 @@ calibrator.fit(X_train, y_train)
 # Calibrate new predictions
 calibrated_probabilities = calibrator.predict_proba(X_test)
 Step-by-Step Methodology for Calibration Using PAVA
+
 1. Obtain Predicted Probabilities and Actual Outcomes
 Collect the predicted probabilities from the classifier (e.g., logistic regression, random forest) and the actual outcomes.
 
 2. PAVA Calibration
+   
 2.1 Monotonicity
 A calibration curve is monotonic if the predicted probability of an event either consistently increases or remains the same as the underlying score or likelihood increases. This logical progression is essential for maintaining prediction integrity.
 
