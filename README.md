@@ -28,7 +28,6 @@ from sklearn.model_selection import RepeatedStratifiedKFold
 from custom_classes.pava_tce_ds_bcdfd import PAVA_TCE_DS_BCDFD_Calibrator
 
 
-
 data = pd.read_csv('datasets/credit_card_fraud_detection_data.csv')
 X = data.drop("Class", axis=1)
 y = data['Class']
@@ -56,6 +55,11 @@ print("precision: ", precision_score(y_test, y_pred_proba >= 0.5, zero_division=
 
 calibrator.plot_pava_bc_statistics(X_test, y_test)
 
+
+
+
+
+# Step-by-Step Methodology for Calibration Using PAVA
 
 1. Obtain Predicted Probabilities and Actual Outcomes
 Collect the predicted probabilities from the classifier (e.g., logistic regression, random forest) and the actual outcomes.
